@@ -15,7 +15,6 @@ struct Todo: Codable, Equatable {
     var dateCreated: Date?
     var title: String?
     
-    // MARK: - Equatable
     static func == (lhs: Todo, rhs: Todo) -> Bool {
         return lhs.id == rhs.id &&
                lhs.todo == rhs.todo &&

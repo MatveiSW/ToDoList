@@ -8,14 +8,13 @@
 import UIKit
 
 final class MainViewController: UIViewController {
-    // MARK: - Properties
+
     private let mainView = MainView()
     private let viewModel = TodoViewModel()
     private var todos: [Todo] = []
     private var filteredTodos: [Todo] = []
     private var isSearching = false
     
-    // MARK: - Lifecycle
     override func loadView() {
         view = mainView
     }
@@ -34,7 +33,6 @@ final class MainViewController: UIViewController {
         loadTodos()
     }
     
-    // MARK: - Setup
     private func setupTableView() {
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
@@ -50,7 +48,7 @@ final class MainViewController: UIViewController {
     
     private func setupTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false // Позволяет обрабатывать тапы по ячейкам
+        tapGesture.cancelsTouchesInView = false
         mainView.addGestureRecognizer(tapGesture)
     }
     
@@ -63,7 +61,6 @@ final class MainViewController: UIViewController {
         navigationController?.pushViewController(newTaskVC, animated: true)
     }
     
-    // MARK: - Data Loading
     private func loadTodos() {
         viewModel.fetchTodos { [weak self] result in
             DispatchQueue.main.async {
@@ -80,7 +77,6 @@ final class MainViewController: UIViewController {
     }
 }
 
-// MARK: - UITableViewDelegate & UITableViewDataSource
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         isSearching ? filteredTodos.count : todos.count
@@ -156,12 +152,10 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    // Отключаем подсветку при тапе
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         return false
     }
     
-    // Отключаем выделение
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         return nil
     }
@@ -189,7 +183,6 @@ extension MainViewController: UISearchBarDelegate {
     }
 }
 
-// MARK: - Context Menu Actions
 private extension MainViewController {
     func editTodo(_ todo: Todo) {
         let newTaskVC = NewTaskViewController(todo: todo)
@@ -197,7 +190,6 @@ private extension MainViewController {
     }
     
     func shareTodo(_ todo: Todo) {
-        // Создаем текст для шаринга
         let shareText = "Задача: \(todo.todo)"
         
         let activityViewController = UIActivityViewController(
@@ -205,7 +197,6 @@ private extension MainViewController {
             applicationActivities: nil
         )
         
-        // Для iPad
         if let popoverController = activityViewController.popoverPresentationController {
             popoverController.sourceView = view
             popoverController.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
@@ -225,7 +216,6 @@ private extension MainViewController {
         let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
             guard let self = self else { return }
             
-            // Сначала удаляем из локального массива
             if self.isSearching {
                 self.filteredTodos.remove(at: indexPath.row)
                 if let index = self.todos.firstIndex(where: { $0.id == todo.id }) {
@@ -235,18 +225,15 @@ private extension MainViewController {
                 self.todos.remove(at: indexPath.row)
             }
             
-            // Обновляем UI
             self.mainView.tableView.deleteRows(at: [indexPath], with: .automatic)
             self.mainView.updateTaskCount(self.todos.count)
             
-            // Затем удаляем из CoreData
             self.viewModel.deleteTodo(todo) { result in
                 switch result {
                 case .success:
-                    break // UI уже обновлен
+                    break
                 case .failure(let error):
                     print("Error deleting todo: \(error)")
-                    // Можно добавить восстановление удаленной задачи в случае ошибки
                 }
             }
         }

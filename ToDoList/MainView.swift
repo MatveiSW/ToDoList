@@ -8,7 +8,6 @@
 import UIKit
 
 final class MainView: UIView {
-    // MARK: - UI Elements
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Задачи"
@@ -25,14 +24,11 @@ final class MainView: UIView {
         searchBar.tintColor = .white
         searchBar.searchTextField.textColor = .white
         
-        // Настраиваем цвет фона текстового поля
         searchBar.searchTextField.backgroundColor = .systemGray
         
-        // Настраиваем внешний вид
         if let textField = searchBar.value(forKey: "searchField") as? UITextField {
             textField.backgroundColor = .systemGray.withAlphaComponent(0.8)
             
-            // Изменяем цвет placeholder
             if let placeholderLabel = textField.value(forKey: "placeholderLabel") as? UILabel {
                 placeholderLabel.textColor = .gray
             }
@@ -77,7 +73,6 @@ final class MainView: UIView {
         return button
     }()
     
-    // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -87,7 +82,6 @@ final class MainView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Setup
     private func setupUI() {
         backgroundColor = .black
         
@@ -127,7 +121,6 @@ final class MainView: UIView {
         ])
     }
     
-    // MARK: - Public Methods
     func updateTaskCount(_ count: Int) {
         taskCountLabel.text = "\(count) Задач"
     }

@@ -21,7 +21,6 @@ final class ApplicationRouter {
         navigationController.modalPresentationStyle = .overFullScreen
         navigationController.modalTransitionStyle = .crossDissolve
         
-        
         transitionHandler.present(navigationController, animated: true)
     }
 }

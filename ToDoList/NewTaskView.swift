@@ -8,7 +8,6 @@
 import UIKit
 
 final class NewTaskView: UIView {
-    // MARK: - UI Elements
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
         let image = UIImage(systemName: "chevron.left")
@@ -50,7 +49,6 @@ final class NewTaskView: UIView {
         return textView
     }()
     
-    // MARK: - Properties
     var onBackButtonTap: (() -> Void)?
     var onDoneButtonTap: (() -> Void)?
     
@@ -71,7 +69,6 @@ final class NewTaskView: UIView {
         return nil
     }
     
-    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -128,7 +125,7 @@ final class NewTaskView: UIView {
     
     func setText(_ text: String) {
         textView.text = text
-        textViewDidChange(textView) // Вызываем для применения форматирования
+        textViewDidChange(textView)
     }
 }
 
@@ -139,21 +136,16 @@ extension NewTaskView: UITextViewDelegate {
             updateDate()
         }
         
-        // Обновляем состояние кнопки "Готово"
         doneButton.isEnabled = !textView.text.isEmpty
         
-        // Применяем форматирование
         let attributedText = NSMutableAttributedString(string: textView.text)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 8
         
-        // Применяем белый цвет ко всему тексту
         attributedText.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: attributedText.length))
         
-        // Сначала применяем обычный шрифт ко всему тексту
         attributedText.addAttribute(.font, value: UIFont.systemFont(ofSize: 17), range: NSRange(location: 0, length: attributedText.length))
         
-        // Затем форматируем только первую строку как заголовок
         if let firstLineRange = textView.text.range(of: "^[^\n]*", options: .regularExpression) {
             let nsRange = NSRange(firstLineRange, in: textView.text)
             attributedText.addAttribute(.font, value: UIFont.systemFont(ofSize: 34, weight: .bold), range: nsRange)
@@ -161,12 +153,10 @@ extension NewTaskView: UITextViewDelegate {
         
         attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
         
-        // Сохраняем позицию курсора
         let selectedRange = textView.selectedRange
         textView.attributedText = attributedText
         textView.selectedRange = selectedRange
         
-        // Устанавливаем размер шрифта для ввода в зависимости от позиции курсора
         if let currentLine = getCurrentLine(in: textView) {
             textView.typingAttributes = [
                 .font: currentLine == 0 ? UIFont.systemFont(ofSize: 34, weight: .bold) : UIFont.systemFont(ofSize: 17),

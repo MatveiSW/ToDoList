@@ -1,28 +1,22 @@
 import Foundation
 
 final class TodoViewModel {
-    // MARK: - Properties
     private let networkManager = NetworkManager.shared
     private let coreDataManager = CoreDataManager.shared
     
-    // MARK: - Completion Handler Type
     typealias TodosCompletion = (Result<[Todo], Error>) -> Void
     
-    // MARK: - Public Methods
     func fetchTodos(completion: @escaping TodosCompletion) {
-        // Сначала возвращаем локальные данные
         let localTodos = coreDataManager.fetchTodos()
         if !localTodos.isEmpty {
             completion(.success(localTodos))
         }
         
-        // В любом случае проверяем обновления с сервера
         networkManager.fetchTodos { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(let response):
-                // Модифицируем данные
                 let modifiedTodos = response.todos.map { todo in
                     var modifiedTodo = todo
                     modifiedTodo.title = "My task"
@@ -30,23 +24,18 @@ final class TodoViewModel {
                     return modifiedTodo
                 }
                 
-                // Сохраняем в CoreData (существующие и неудаленные задачи не будут дублироваться)
                 self.coreDataManager.saveTodos(modifiedTodos)
                 
-                // Получаем обновленный список задач из CoreData
                 let updatedTodos = self.coreDataManager.fetchTodos()
                 if !localTodos.isEmpty {
-                    // Если это обновление данных, отправляем новый результат только если есть изменения
                     if updatedTodos != localTodos {
                         completion(.success(updatedTodos))
                     }
                 } else {
-                    // Если это первая загрузка, отправляем результат в любом случае
                     completion(.success(updatedTodos))
                 }
                 
             case .failure(let error):
-                // Сообщаем об ошибке только если у нас нет локальных данных
                 if localTodos.isEmpty {
                     completion(.failure(error))
                 }
@@ -58,7 +47,6 @@ final class TodoViewModel {
         var updatedTodo = todo
         updatedTodo.completed.toggle()
         
-        // Обновляем в CoreData
         coreDataManager.updateTodo(updatedTodo)
         completion(.success(updatedTodo))
     }
@@ -87,20 +75,16 @@ final class TodoViewModel {
     }
     
     func updateTodo(_ todo: Todo, completion: @escaping (Result<Todo, Error>) -> Void) {
-        // Обновляем в CoreData
         coreDataManager.updateTodo(todo)
         completion(.success(todo))
     }
     
     func deleteTodo(_ todo: Todo, completion: @escaping (Result<Void, Error>) -> Void) {
-        // Удаляем из CoreData
         coreDataManager.deleteTodo(todo)
         completion(.success(()))
     }
     
-    // Добавьте этот метод в класс TodoViewModel
     func saveTodo(_ todo: Todo, completion: @escaping (Result<Todo, Error>) -> Void) {
-        // Сохраняем в CoreData
         coreDataManager.saveTodo(todo)
         completion(.success(todo))
     }

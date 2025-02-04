@@ -1,7 +1,6 @@
 import UIKit
 
 final class MainTableViewCell: UITableViewCell {
-    // MARK: - UI Elements
     private lazy var checkmarkButton: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .systemYellow
@@ -35,7 +34,6 @@ final class MainTableViewCell: UITableViewCell {
         return label
     }()
     
-    // MARK: - Properties
     var onCheckmarkTap: (() -> Void)?
     
     // MARK: - Initialization
@@ -84,14 +82,11 @@ final class MainTableViewCell: UITableViewCell {
         ])
     }
     
-    // MARK: - Actions
     @objc private func checkmarkTapped() {
         onCheckmarkTap?()
     }
     
-    // MARK: - Configuration
     func configure(with todo: Todo) {
-        // Дата и чекбокс
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yy"
         dateLabel.text = todo.dateCreated.map { dateFormatter.string(from: $0) } ?? ""
@@ -99,7 +94,6 @@ final class MainTableViewCell: UITableViewCell {
         let checkmarkImage = todo.completed ? "checkmark.circle.fill" : "circle"
         checkmarkButton.setImage(UIImage(systemName: checkmarkImage), for: .normal)
         
-        // Настройка текста и стилей
         let title = todo.title ?? "My task"
         descriptionLabel.text = todo.todo
         
@@ -110,8 +104,8 @@ final class MainTableViewCell: UITableViewCell {
             )
             descriptionLabel.textColor = .gray
         } else {
-            titleLabel.attributedText = nil // Сначала очищаем атрибуты
-            titleLabel.text = title // Затем устанавливаем обычный текст
+            titleLabel.attributedText = nil
+            titleLabel.text = title 
             descriptionLabel.textColor = .white
         }
     }

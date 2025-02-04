@@ -13,7 +13,6 @@ final class NewTaskViewController: UIViewController {
     private var existingTodo: Todo?
     private var isTaskSaved = false
     
-    // MARK: - Init
     init(todo: Todo? = nil) {
         self.existingTodo = todo
         super.init(nibName: nil, bundle: nil)
@@ -23,7 +22,6 @@ final class NewTaskViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Lifecycle
     override func loadView() {
         view = newTaskView
     }
@@ -36,7 +34,6 @@ final class NewTaskViewController: UIViewController {
         }
     }
     
-    // MARK: - Setup
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
         
@@ -50,7 +47,6 @@ final class NewTaskViewController: UIViewController {
     }
     
     private func setupExistingTodo(_ todo: Todo) {
-        // Устанавливаем текст для редактирования
         var text = todo.title ?? ""
         if !todo.todo.isEmpty {
             text += "\n\(todo.todo)"
@@ -58,7 +54,6 @@ final class NewTaskViewController: UIViewController {
         newTaskView.setText(text)
     }
     
-    // MARK: - Actions
     private func handleBackButton() {
         if newTaskView.hasChanges && !isTaskSaved {
             saveTask()
@@ -77,7 +72,6 @@ final class NewTaskViewController: UIViewController {
         guard let title = newTaskView.taskTitle else { return }
         
         if let existingTodo = existingTodo {
-            // Обновляем существующую задачу
             var updatedTodo = existingTodo
             updatedTodo.title = title
             updatedTodo.todo = newTaskView.taskDescription ?? ""
@@ -93,7 +87,6 @@ final class NewTaskViewController: UIViewController {
                 }
             }
         } else {
-            // Создаем новую задачу
             let newTodo = Todo(
                 id: Int(Date().timeIntervalSince1970),
                 todo: newTaskView.taskDescription ?? "",
@@ -108,7 +101,7 @@ final class NewTaskViewController: UIViewController {
                 case .success:
                     DispatchQueue.main.async {
                         self?.isTaskSaved = true
-                        self?.existingTodo = newTodo // Сохраняем созданную задачу как существующую
+                        self?.existingTodo = newTodo
                     }
                 case .failure(let error):
                     print("Error saving task: \(error)")

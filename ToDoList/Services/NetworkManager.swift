@@ -47,30 +47,5 @@ final class NetworkManager {
             task.resume()
         }
     }
-    
-    // Добавим методы для остальных операций
-    func createTodo(todo: Todo, completion: @escaping (Result<Todo, NetworkError>) -> Void) {
-        queue.async {
-            // Реализация создания todo
-        }
-    }
-    
-    func updateTodo(todo: Todo, completion: @escaping (Result<Todo, NetworkError>) -> Void) {
-        queue.async {
-            // Реализация обновления todo
-        }
-    }
-    
-    func deleteTodo(id: Int, completion: @escaping (Result<Bool, NetworkError>) -> Void) {
-        queue.async {
-            // Реализация удаления todo
-        }
-    }
-    
-    func searchTodos(query: String, completion: @escaping (Result<[Todo], NetworkError>) -> Void) {
-        queue.async {
-            // Реализация поиска todos
-        }
-    }
 }
 

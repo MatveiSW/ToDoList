@@ -159,11 +159,8 @@
 		2B61F12D2D4CE0BE009C2899 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2B5EEBFD2D4CE07800E8B233 /* MainViewController.swift */,
-				2B61F1332D4CE179009C2899 /* MainView.swift */,
-				2B61F1422D524BD0009C2899 /* MainTableViewCell.swift */,
-				2B61F14A2D5262A2009C2899 /* NewTaskView.swift */,
-				2B61F14C2D5262AA009C2899 /* NewTaskViewController.swift */,
+				2B61F14E2D526D7D009C2899 /* Main */,
+				2B61F14F2D526D84009C2899 /* NewTask */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -208,6 +205,25 @@
 				2B61F13D2D524841009C2899 /* TodoViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		2B61F14E2D526D7D009C2899 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				2B5EEBFD2D4CE07800E8B233 /* MainViewController.swift */,
+				2B61F1332D4CE179009C2899 /* MainView.swift */,
+				2B61F1422D524BD0009C2899 /* MainTableViewCell.swift */,
+			);
+			name = Main;
+			sourceTree = "<group>";
+		};
+		2B61F14F2D526D84009C2899 /* NewTask */ = {
+			isa = PBXGroup;
+			children = (
+				2B61F14A2D5262A2009C2899 /* NewTaskView.swift */,
+				2B61F14C2D5262AA009C2899 /* NewTaskViewController.swift */,
+			);
+			name = NewTask;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
